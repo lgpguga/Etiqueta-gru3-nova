@@ -100,7 +100,7 @@ function LabelHalfPreview({
       <div className="shrink-0 flex w-full gap-1 [-webkit-print-color-adjust:exact] [print-color-adjust:exact]">
         <div className="w-[28%] box-border border-2 border-black bg-white text-black px-1 py-1 text-center flex flex-col justify-center">
           <div className="text-[8px] font-bold leading-tight">{T.gridLabel}</div>
-          <div className="text-3xl font-bold leading-tight mt-0.5 tracking-wide break-all">
+          <div className="text-[20px] font-bold leading-tight mt-0.5 tracking-wide break-all">
             {grid || "—"}
           </div>
         </div>
@@ -270,7 +270,7 @@ export default function Home() {
             .hub-row { display: flex; gap: 2px; flex-shrink: 0; width: 100%; }
             .grid-wrap { width: 28%; text-align: center; box-sizing: border-box; border: 2px solid #000; background: #fff; color: #000; padding: 3px 4px; display: flex; flex-direction: column; justify-content: center; }
             .grid-title { font-size: 7px; font-weight: bold; line-height: 1.15; }
-            .grid-code { font-size: 28px; font-weight: bold; margin-top: 1px; line-height: 1.1; word-break: break-all; letter-spacing: 0.3px; }
+            .grid-code { font-size: 20px; font-weight: bold; margin-top: 1px; line-height: 1.1; word-break: break-all; letter-spacing: 0.3px; }
             .hub-wrap { flex: 1; text-align: center; box-sizing: border-box; background: #000; color: #fff; padding: 3px 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; flex-direction: column; justify-content: center; }
             .hub-title { font-size: 8px; font-weight: bold; line-height: 1.15; color: #fff; }
             .hub-code { font-size: 28px; font-weight: bold; margin-top: 1px; line-height: 1.1; color: #fff; letter-spacing: 0.3px; word-break: break-all; }

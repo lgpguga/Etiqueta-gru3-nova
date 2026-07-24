@@ -41,28 +41,31 @@ function escapeHtml(s: string) {
 }
 
 const T = {
-  appTitle: "Etiqueta GRU3 Nova — GRID",
-  appSubtitle: "Anjun Express — Nova Base de Dados (GRID / HUB / IATAs)",
-  panelTitle: "Controles da Etiqueta",
-  gridSelectLabel: "GRID",
-  quantityLabel: "Quantidade de etiquetas",
-  loading: "Carregando...",
-  noGrid: "Nenhum GRID na planilha",
-  configError: "Configure o Apps Script. Veja o README.",
-  printZebra: "Imprimir (Zebra térmica)",
-  printPdf: "Imprimir em PDF",
+  appTitle: "标签 GRU3 新版 — 网格 Etiqueta GRU3 Nova — GRID",
+  appSubtitle:
+    "安骏快递 — 新数据库（网格 / 枢纽 / 机场代码） Anjun Express — Nova Base de Dados (GRID / HUB / IATAs)",
+  panelTitle: "标签控制 Controles da Etiqueta",
+  gridSelectLabel: "网格 GRID",
+  quantityLabel: "标签数量 Quantidade de etiquetas",
+  loading: "加载中... Carregando...",
+  noGrid: "表格中无网格 Nenhum GRID na planilha",
+  configError: "请配置 Apps Script。请参阅 README。 Configure o Apps Script. Veja o README.",
+  printZebra: "打印（热敏斑马） Imprimir (Zebra térmica)",
+  printPdf: "打印PDF Imprimir em PDF",
   labelTitle: "运输标签 ETIQUETA DE TRANSPORTE GRU3",
-  generateToPreview: "Selecione um GRID para visualizar",
-  errorSelectGrid: "Selecione um GRID.",
-  errorLoadIata: "Não foi possível carregar a lista. Verifique .env.local",
-  placeholder: "Digite ou selecione o GRID",
-  hubLabel: "HUB VINCULADO",
-  gridLabel: "GRID",
-  iatasLabel: "IATAs",
-  loadMock: "Testar layout (dados de exemplo)",
-  loadReal: "Carregar planilha real",
+  generateToPreview: "请选择网格以预览 Selecione um GRID para visualizar",
+  errorSelectGrid: "请选择网格。 Selecione um GRID.",
+  errorLoadIata: "无法加载列表。请检查 .env.local Não foi possível carregar a lista. Verifique .env.local",
+  placeholder: "输入或选择网格 Digite ou selecione o GRID",
+  hubLabel: "关联枢纽 HUB VINCULADO",
+  gridLabel: "分拣滑槽 SAÍDA",
+  iatasLabel: "派送点 PONTOS DE ENTREGA",
+  loadMock: "使用示例数据 Usar dados de exemplo",
+  loadReal: "重新加载表格 Recarregar planilha",
   mockHint:
-    "Modo demonstração: dados de data/mock-base.json — não publica nada no Git/Vercel.",
+    "正在使用示例数据。点击“重新加载表格”以使用真实数据。 Usando dados de exemplo. Clique em Recarregar planilha para a base real.",
+  dataSource:
+    "数据来源：标签基础 GRU3 — 工作表“新数据库”。按网格选择。 Dados: Base Etiquetas GRU3 — aba Nova Base de Dados. Seleção por GRID.",
 };
 
 function LabelHalfPreview({
@@ -82,22 +85,22 @@ function LabelHalfPreview({
     <div
       className={`flex-1 min-h-0 flex flex-col p-2 ${mirrored ? "rotate-180" : ""}`}
     >
-      <div className="flex justify-start mb-1">
+      <div className="flex justify-start mb-0.5">
         <img
           src="/logo-anjun.png"
           alt={mirrored ? "" : "Anjun Express"}
-          className="h-6 w-auto max-w-[55%] object-contain"
+          className="h-5 w-auto max-w-[50%] object-contain"
         />
       </div>
-      <div className="text-center text-sm font-bold text-gray-700 mb-1">
+      <div className="text-center text-xs font-bold text-gray-700 mb-0.5">
         {T.labelTitle}
       </div>
 
       {/* GRID (menor) + HUB na mesma linha */}
       <div className="shrink-0 flex w-full gap-1 [-webkit-print-color-adjust:exact] [print-color-adjust:exact]">
         <div className="w-[28%] box-border border-2 border-black bg-white text-black px-1 py-1 text-center flex flex-col justify-center">
-          <div className="text-[8px] font-bold leading-tight">{T.gridLabel}</div>
-          <div className="text-sm font-bold leading-tight mt-0.5 break-all">
+          <div className="text-[9px] font-bold leading-tight">{T.gridLabel}</div>
+          <div className="text-3xl font-bold leading-tight mt-0.5 tracking-wide break-all">
             {grid || "—"}
           </div>
         </div>
@@ -105,21 +108,21 @@ function LabelHalfPreview({
           <div className="text-[9px] font-bold leading-tight opacity-90">
             {T.hubLabel}
           </div>
-          <div className="text-xl font-bold leading-tight mt-0.5 tracking-wide break-all">
+          <div className="text-3xl font-bold leading-tight mt-0.5 tracking-wide break-all">
             {hub || "—"}
           </div>
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 mt-1.5 overflow-hidden">
-        <div className="text-[9px] font-bold text-gray-600 mb-0.5 text-center">
+      <div className="flex-1 min-h-0 mt-1 flex flex-col">
+        <div className="text-[8px] font-bold text-gray-600 mb-0.5 text-center leading-none shrink-0">
           {T.iatasLabel}
         </div>
-        <div className="grid grid-cols-6 gap-0.5 content-start">
+        <div className="grid grid-cols-4 gap-0.5 flex-1 min-h-0 content-stretch auto-rows-fr">
           {(iatas.length ? iatas : ["—"]).map((code, i) => (
             <div
               key={`${code}-${i}`}
-              className="border border-black text-center text-[8px] font-semibold py-0.5 px-0.5 leading-tight"
+              className="border border-black text-center text-[12px] font-bold flex items-center justify-center px-0.5 leading-none"
             >
               {code}
             </div>
@@ -169,7 +172,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    loadData(true);
+    loadData(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -251,31 +254,31 @@ export default function Home() {
       <html lang="pt-BR">
         <head>
           <meta charset="UTF-8">
-          <title>Etiqueta GRU3 - GRID ${gridEsc}</title>
+          <title>运输标签 Etiqueta GRU3 - 网格 GRID ${gridEsc}</title>
           <style>
             @page { size: 100mm 150mm; margin: 0; }
             body { margin: 0; padding: 0; font-family: Arial, "Microsoft YaHei", "PingFang SC", "SimSun", sans-serif; }
             .label { width: 100mm; height: 150mm; padding: 0; box-sizing: border-box; page-break-after: always; display: flex; flex-direction: column; position: relative; }
             .label:last-child { page-break-after: auto; }
-            .label-half { flex: 1; min-height: 0; padding: 2.5mm; display: flex; flex-direction: column; box-sizing: border-box; }
+            .label-half { flex: 1; min-height: 0; padding: 2mm; display: flex; flex-direction: column; box-sizing: border-box; }
             .label-top { }
             .label-bottom { transform: rotate(180deg); }
             .label-divider { height: 2px; background: #000; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .label-logo { text-align: left; margin-bottom: 2px; }
-            .label-logo .logo-img { height: 10mm; width: auto; max-width: 45mm; object-fit: contain; display: block; }
-            .header { text-align: center; margin-bottom: 3px; font-size: 12px; font-weight: bold; }
+            .label-logo { text-align: left; margin-bottom: 1px; }
+            .label-logo .logo-img { height: 8mm; width: auto; max-width: 40mm; object-fit: contain; display: block; }
+            .header { text-align: center; margin-bottom: 2px; font-size: 11px; font-weight: bold; }
             .hub-row { display: flex; gap: 2px; flex-shrink: 0; width: 100%; }
             .grid-wrap { width: 28%; text-align: center; box-sizing: border-box; border: 2px solid #000; background: #fff; color: #000; padding: 3px 4px; display: flex; flex-direction: column; justify-content: center; }
-            .grid-title { font-size: 7px; font-weight: bold; line-height: 1.2; }
-            .grid-code { font-size: 12px; font-weight: bold; margin-top: 1px; line-height: 1.1; word-break: break-all; }
-            .hub-wrap { flex: 1; text-align: center; box-sizing: border-box; background: #000; color: #fff; padding: 4px 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; flex-direction: column; justify-content: center; }
-            .hub-title { font-size: 9px; font-weight: bold; line-height: 1.2; color: #fff; }
-            .hub-code { font-size: 20px; font-weight: bold; margin-top: 2px; line-height: 1.1; color: #fff; letter-spacing: 0.3px; word-break: break-all; }
-            .iatas-wrap { flex: 1; min-height: 0; margin-top: 3px; }
-            .iatas-title { font-size: 8px; font-weight: bold; text-align: center; margin-bottom: 2px; }
-            .iatas-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.5px; }
-            .iata-cell { border: 1px solid #000; text-align: center; font-size: 8px; font-weight: 600; padding: 2px 1px; line-height: 1.15; box-sizing: border-box; }
-            .footer { text-align: right; font-size: 8px; margin-top: auto; padding-top: 2px; }
+            .grid-title { font-size: 8px; font-weight: bold; line-height: 1.15; }
+            .grid-code { font-size: 28px; font-weight: bold; margin-top: 1px; line-height: 1.1; word-break: break-all; letter-spacing: 0.3px; }
+            .hub-wrap { flex: 1; text-align: center; box-sizing: border-box; background: #000; color: #fff; padding: 3px 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; flex-direction: column; justify-content: center; }
+            .hub-title { font-size: 8px; font-weight: bold; line-height: 1.15; color: #fff; }
+            .hub-code { font-size: 28px; font-weight: bold; margin-top: 1px; line-height: 1.1; color: #fff; letter-spacing: 0.3px; word-break: break-all; }
+            .iatas-wrap { flex: 1; min-height: 0; margin-top: 2px; display: flex; flex-direction: column; }
+            .iatas-title { font-size: 8px; font-weight: bold; text-align: center; margin-bottom: 1px; line-height: 1; flex-shrink: 0; }
+            .iatas-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; flex: 1; min-height: 0; }
+            .iata-cell { border: 1px solid #000; text-align: center; font-size: 11px; font-weight: 700; padding: 2px 1px; line-height: 1.05; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+            .footer { text-align: right; font-size: 8px; margin-top: auto; padding-top: 1px; }
           </style>
         </head>
         <body>
@@ -398,26 +401,16 @@ export default function Home() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => loadData(true)}
-                  disabled={loadingIata}
-                  className="w-full py-2 rounded-lg font-medium bg-[var(--bg-tertiary)] hover:opacity-90 disabled:opacity-50 text-sm"
-                >
-                  {T.loadMock}
-                </button>
-                <button
-                  type="button"
                   onClick={() => loadData(false)}
                   disabled={loadingIata}
-                  className="w-full py-2 rounded-lg font-medium border border-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)] disabled:opacity-50 text-sm"
+                  className="w-full py-2 rounded-lg font-medium bg-[var(--bg-tertiary)] hover:opacity-90 disabled:opacity-50 text-sm"
                 >
                   {T.loadReal}
                 </button>
               </div>
             </div>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Dados: Base Etiquetas GRU3 — aba{" "}
-              <span className="text-white">Nova Base de Dados</span>
-              . Seleção por <span className="text-white">GRID</span>.
+              {T.dataSource}
             </p>
           </div>
 
@@ -444,7 +437,7 @@ export default function Home() {
             </div>
             {canPrint && quantity > 1 && (
               <p className="text-center text-sm text-gray-500 mt-2 p-2">
-                + {quantity - 1} etiqueta(s) adicionais
+                + {quantity - 1} 张额外标签 etiqueta(s) adicionais
               </p>
             )}
             {!canPrint && (

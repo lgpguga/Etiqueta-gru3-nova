@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Etiqueta GRU3 (SP-RR-002) - Anjun Express",
-  description: "Sistema de etiquetas GRU3 para sacas - identificação por região",
+  title: "标签 GRU3 新版 Etiqueta GRU3 Nova - Anjun Express",
+  description:
+    "安骏快递 GRU3 标签系统 — 按网格识别  Sistema de etiquetas GRU3 — identificação por GRID",
 };
 
 export default function RootLayout({
@@ -12,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" dir="ltr">
+    <html lang="zh-CN" dir="ltr">
       <body className="antialiased">{children}</body>
     </html>
   );

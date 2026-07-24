@@ -1,0 +1,17 @@
+[
+  {
+    "grid": "G01",
+    "hubVinculado": "SP-RR-002",
+    "iatas": ["GRU", "CGH", "VCP", "SJK", "RAO", "BAU", "LDB", "CWB", "FLN", "POA", "CGB", "CGR", "BSB", "CNF", "GIG", "SDU"]
+  },
+  {
+    "grid": "G02",
+    "hubVinculado": "PR-CT-001",
+    "iatas": ["CWB", "LDB", "MGF", "GPB", "IGU", "CAC"]
+  },
+  {
+    "grid": "G03",
+    "hubVinculado": "RS-PO-003",
+    "iatas": ["POA", "RIG", "PFB", "CXJ", "BGX", "PET", "URG", "SQA"]
+  }
+]

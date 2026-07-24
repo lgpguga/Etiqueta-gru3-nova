@@ -35,7 +35,8 @@ Se você criou um projeto em script.google.com, **delete** e crie de novo dentro
 
 Abra no navegador a URL de execução da sua implantação (termina em `/exec`).
 
-Se aparecer JSON com `"status":"success"` e `"versao":"gru3-2026-nova-base"` (aba Nova Base de Dados) → o novo código está ativo.
+- Sem parâmetro ou `?action=getIataList` → programa **antigo**: `"versao":"gru3-2026-dual-iata"` e itens com `"iata"`.
+- Com `?action=getNovaBase` → programa **novo**: `"versao":"gru3-2026-dual-nova"` e itens com `"grid"` + `"iatas"`.
 
 Se ainda aparecer erro de "Document" ou "Ação não reconhecida" → a implantação não foi atualizada. Repita o passo 4.
 

@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
     );
   }
   try {
-    const url = `${APP_SCRIPT_URL}${APP_SCRIPT_URL.includes("?") ? "&" : "?"}action=getIataList`;
+    const url = `${APP_SCRIPT_URL}${APP_SCRIPT_URL.includes("?") ? "&" : "?"}action=getNovaBase`;
     const res = await fetch(url, { cache: "no-store" });
     const text = await res.text();
     let data;

@@ -5,9 +5,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 type HubRow = {
   grid: string;
   hubVinculado: string;
-  /** Valores das colunas C–R (IATA 1…16), na ordem; vazios omitidos na exibição */
+  /** Valores das colunas C–R (IATA 1…16), na ordem; vazios preservados para montar as linhas */
   iatas: string[];
 };
+
+const IATA_COLS_PER_ROW = 4;
+const IATA_SLOT_COUNT = 16;
 
 function normalizePayload(data: unknown): HubRow[] {
   if (!Array.isArray(data)) return [];
@@ -22,14 +25,27 @@ function normalizePayload(data: unknown): HubRow[] {
     ).trim();
     let iatas: string[] = [];
     if (Array.isArray(o.iatas)) {
-      // Mantém a ordem C→R; só remove células vazias para a grade
       iatas = o.iatas
-        .map((x) => String(x ?? "").trim())
-        .filter(Boolean);
+        .slice(0, IATA_SLOT_COUNT)
+        .map((x) => String(x ?? "").trim());
+      while (iatas.length < IATA_SLOT_COUNT) iatas.push("");
     }
     rows.push({ grid, hubVinculado, iatas });
   }
   return rows;
+}
+
+/** Agrupa IATA 1–16 em linhas de 4; omite células vazias e linhas sem pontos. */
+function chunkIatasIntoRows(iatas: string[]): string[][] {
+  const slots = Array.from({ length: IATA_SLOT_COUNT }, (_, i) =>
+    String(iatas[i] ?? "").trim()
+  );
+  const out: string[][] = [];
+  for (let i = 0; i < IATA_SLOT_COUNT; i += IATA_COLS_PER_ROW) {
+    const row = slots.slice(i, i + IATA_COLS_PER_ROW).filter(Boolean);
+    if (row.length) out.push(row);
+  }
+  return out.length ? out : [["—"]];
 }
 
 function escapeHtml(s: string) {
@@ -118,13 +134,23 @@ function LabelHalfPreview({
         <div className="text-[8px] font-bold text-gray-600 mb-0.5 text-center leading-none shrink-0">
           {T.iatasLabel}
         </div>
-        <div className="grid grid-cols-4 gap-0.5 flex-1 min-h-0 content-stretch auto-rows-fr">
-          {(iatas.length ? iatas : ["—"]).map((code, i) => (
+        <div className="flex flex-col gap-0.5 flex-1 min-h-0">
+          {chunkIatasIntoRows(iatas).map((row, rowIdx) => (
             <div
-              key={`${code}-${i}`}
-              className="border border-black text-center text-[12px] font-bold flex items-center justify-center px-0.5 leading-none"
+              key={`iata-row-${rowIdx}`}
+              className="grid gap-0.5 flex-1 min-h-0"
+              style={{
+                gridTemplateColumns: `repeat(${row.length}, minmax(0, 1fr))`,
+              }}
             >
-              {code}
+              {row.map((code, i) => (
+                <div
+                  key={`${code}-${rowIdx}-${i}`}
+                  className="border border-black text-center text-[12px] font-bold flex items-center justify-center px-0.5 leading-none min-h-0"
+                >
+                  {code}
+                </div>
+              ))}
             </div>
           ))}
         </div>
@@ -204,14 +230,15 @@ export default function Home() {
 
     const hubEsc = escapeHtml(hubCode || "—");
     const gridEsc = escapeHtml(gridCode);
-    const iatasHtml =
-      iatasList.length > 0
-        ? iatasList
-            .map(
-              (c) => `<div class="iata-cell">${escapeHtml(c)}</div>`
-            )
-            .join("")
-        : `<div class="iata-cell">—</div>`;
+    const iataRows = chunkIatasIntoRows(iatasList);
+    const iatasHtml = iataRows
+      .map(
+        (row) =>
+          `<div class="iatas-row" style="grid-template-columns: repeat(${row.length}, minmax(0, 1fr));">${row
+            .map((c) => `<div class="iata-cell">${escapeHtml(c)}</div>`)
+            .join("")}</div>`
+      )
+      .join("");
 
     const labelHalfHtml = (cssClass = "") => `
       <div class="label-half ${cssClass}">
@@ -276,8 +303,9 @@ export default function Home() {
             .hub-code { font-size: 28px; font-weight: bold; margin-top: 1px; line-height: 1.1; color: #fff; letter-spacing: 0.3px; word-break: break-all; }
             .iatas-wrap { flex: 1; min-height: 0; margin-top: 2px; display: flex; flex-direction: column; }
             .iatas-title { font-size: 8px; font-weight: bold; text-align: center; margin-bottom: 1px; line-height: 1; flex-shrink: 0; }
-            .iatas-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 2px; flex: 1; min-height: 0; }
-            .iata-cell { border: 1px solid #000; text-align: center; font-size: 11px; font-weight: 700; padding: 2px 1px; line-height: 1.05; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
+            .iatas-grid { display: flex; flex-direction: column; gap: 2px; flex: 1; min-height: 0; }
+            .iatas-row { display: grid; gap: 2px; flex: 1; min-height: 0; }
+            .iata-cell { border: 1px solid #000; text-align: center; font-size: 11px; font-weight: 700; padding: 2px 1px; line-height: 1.05; box-sizing: border-box; display: flex; align-items: center; justify-content: center; min-height: 0; }
             .footer { text-align: right; font-size: 8px; margin-top: auto; padding-top: 1px; }
           </style>
         </head>

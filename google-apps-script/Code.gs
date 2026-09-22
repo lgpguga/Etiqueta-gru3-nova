@@ -1,19 +1,26 @@
 /**
- * Etiqueta GRU3 + CDL GRU3 — Google Apps Script unificado
+ * Apps Script UNIFICADO — uma única implantação (/exec) para:
+ *   - Etiqueta GRU3 (antiga)
+ *   - Etiqueta GRU3 Nova (GRID / HUB / IATAs)
+ *   - Etiqueta CDL GRU3 (serial prefixo D)
+ *
  * Planilha: https://docs.google.com/spreadsheets/d/1-K5l5D0K3MhRto6dHfaVEvkXP-WFOalkgNjSSRQ2kE4/edit
  *
  * APOS COLAR: Salve > Implantar > Gerencie implantações > Editar > Nova versão > Implantar
+ * NÃO crie scripts separados por app — os dois apps usam a MESMA URL em APP_SCRIPT_URL.
  *
- * === GET (doGet) ===
- *   getIataList      → etiqueta-gru3 ANTIGO   [{ iata, hubVinculado }]
- *   getNovaBase      → etiqueta-gru3-nova     [{ grid, hubVinculado, iatas }]
- *   getCdlGru3IataList → Etiqueta CDL GRU3    [{ iata, grid, hubVinculado }]
- *   (sem action)     → igual a getIataList
+ * === GET (doGet) — query ?action= ===
+ *   getIataList         → etiqueta-gru3 ANTIGO     [{ iata, hubVinculado }]
+ *   getNovaBase         → etiqueta-gru3-nova       [{ grid, hubVinculado, iatas }]
+ *   getCdlGru3IataList  → Etiqueta CDL GRU3        [{ grid, hubVinculado, iatas }]
+ *   (sem action)        → igual a getIataList
  *
- * === POST (doPost) ===
- *   gerarLoteCdlGru3 → CDL GRU3 (serial prefixo D)
- *     params: mac, iata, quantity
- *     → { serials, computador, grid }
+ * === POST (doPost) — body/form action= ===
+ *   gerarLoteCdlGru3 | gerarLote → CDL GRU3 (serial D…)
+ *     params: mac, grid (ou iata), quantity
+ *     → { status, serials, computador, grid, hubVinculado }
+ *
+ * GRU3 Nova só usa GET (getNovaBase). CDL usa GET (lista) + POST (gerar).
  */
 
 var PLANILHA_URL = 'https://docs.google.com/spreadsheets/d/1-K5l5D0K3MhRto6dHfaVEvkXP-WFOalkgNjSSRQ2kE4/edit';
